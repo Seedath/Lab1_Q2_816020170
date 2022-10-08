@@ -35,7 +35,7 @@ static const char *TAG = "main";
 
 //GPIO2 set as output LED
 #define GPIO_OUTPUT_IO			2
-#define GPIO_OUTPUT_PIN_SEL 	(1ULL << GPIO_OUTPUT_IO)
+#define GPIO_OUTPUT_PIN_SEL 		(1ULL << GPIO_OUTPUT_IO)
 
 //GPIO0 set as input button
 #define GPIO_INPUT_IO			0
@@ -57,10 +57,12 @@ static void gpio_task(void *arg)
     for (;;) {
         if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
             ESP_LOGI(TAG, "GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
+			// flash LED if true
 			if (gpio_get_level(io_num) == 0){
 				ESP_LOGI(TAG, "LED On\n");
 				gpio_set_level(GPIO_OUTPUT_IO,1);
 			}
+			// else turn off LED
 			else{
 				ESP_LOGI(TAG,"LED Off\n");
 				gpio_set_level(GPIO_OUTPUT_IO,0);
